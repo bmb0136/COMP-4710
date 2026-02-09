@@ -43,6 +43,9 @@ public enum PitchName {
     }
 
     public PitchName next(int semitones) {
+        if (semitones < 0) {
+            return previous(-semitones);
+        }
         PitchName n = this;
         for (int i = 0; i < semitones; i++) {
             n = this.next();
@@ -68,6 +71,9 @@ public enum PitchName {
     }
 
     public PitchName previous(int semitones) {
+        if (semitones < 0) {
+            return next(-semitones);
+        }
         PitchName n = this;
         for (int i = 0; i < semitones; i++) {
             n = n.previous();
@@ -78,6 +84,20 @@ public enum PitchName {
     public boolean isSharp() {
         return switch (this) {
             case A_SHARP, B_SHARP, C_SHARP, D_SHARP, E_SHARP, F_SHARP, G_SHARP -> true;
+            default -> false;
+        };
+    }
+
+    public boolean isFlat() {
+        return switch (this) {
+            case A_FLAT, B_FLAT, C_FLAT, D_FLAT, E_FLAT, F_FLAT, G_FLAT -> true;
+            default -> false;
+        };
+    }
+
+    public boolean isNatural() {
+        return switch (this) {
+            case A, B, C, D, E, F, G -> true;
             default -> false;
         };
     }
@@ -131,6 +151,9 @@ public enum PitchName {
      * This is done to allow {@link Pitch#tryParse(String)} to simply pass its input into this method to obtain a {@link PitchName}
      */
     public static Optional<PitchName> tryParse(String rawName) {
+        if (rawName == null) {
+            return Optional.empty();
+        }
         rawName = rawName.trim();
         if (rawName.isEmpty()) {
             return Optional.empty();
@@ -156,8 +179,26 @@ public enum PitchName {
             return Optional.of(base);
         }
         return switch (rawName.charAt(1)) {
-            case 'b', 'B' -> Optional.ofNullable(base.previous());
-            case '#' -> Optional.ofNullable(base.next());
+            case 'b', 'B' -> switch (base) {
+                case A -> Optional.of(A_FLAT);
+                case B -> Optional.of(B_FLAT);
+                case C -> Optional.of(C_FLAT);
+                case D -> Optional.of(D_FLAT);
+                case E -> Optional.of(E_FLAT);
+                case F -> Optional.of(F_FLAT);
+                case G -> Optional.of(G_FLAT);
+                default -> throw new AssertionError("Unreachable");
+            };
+            case '#' -> switch (base) {
+                case A -> Optional.of(A_SHARP);
+                case B -> Optional.of(B_SHARP);
+                case C -> Optional.of(C_SHARP);
+                case D -> Optional.of(D_SHARP);
+                case E -> Optional.of(E_SHARP);
+                case F -> Optional.of(F_SHARP);
+                case G -> Optional.of(G_SHARP);
+                default -> throw new AssertionError("Unreachable");
+            };
             default -> Optional.of(base);
         };
     }
