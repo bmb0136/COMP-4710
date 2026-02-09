@@ -6,9 +6,10 @@ import java.util.Optional;
 
 public record Pitch(@NotNull PitchName name, int octave) implements Comparable<Pitch> {
     public Pitch {
-        int midi = toMidi();
+        // Have to copy logic to avoid NullPointerException
+        int midi = 60 + (12 * (octave - 4)) + name.getOctaveOffset();
         if (midi < 0 || midi > 127) {
-            throw new IllegalArgumentException("Pitch: outside of MIDI range");
+            throw new IllegalArgumentException("Pitch: outside of MIDI range (%s%d -> %d)".formatted(name, octave, midi));
         }
     }
 
@@ -19,7 +20,7 @@ public record Pitch(@NotNull PitchName name, int octave) implements Comparable<P
 
     public static Pitch fromMidi(int midiNote, boolean useSharps) {
         int semitonesAboveMiddleC = midiNote - 60;
-        int octave = semitonesAboveMiddleC / 12;
+        int octave = Math.floorDiv(semitonesAboveMiddleC, 12) + 4;
         PitchName name = switch (Math.floorMod(semitonesAboveMiddleC, 12)) {
             case 0 -> PitchName.C;
             case 1 -> useSharps ? PitchName.C_SHARP : PitchName.D_FLAT;
@@ -33,7 +34,7 @@ public record Pitch(@NotNull PitchName name, int octave) implements Comparable<P
             case 9 -> PitchName.A;
             case 10 -> useSharps ? PitchName.A_SHARP : PitchName.B_FLAT;
             case 11 -> PitchName.B;
-            default -> throw new IllegalStateException("Unreachable");
+            default -> throw new AssertionError("Unreachable");
         };
         return new Pitch(name, octave);
     }

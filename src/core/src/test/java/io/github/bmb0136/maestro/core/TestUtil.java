@@ -36,4 +36,8 @@ public final class TestUtil {
         }
         return result.stream();
     }
+
+    public static Stream<Arguments> allMidiNotes() {
+        return Stream.iterate(0, x -> x + 1).limit(128).map(Arguments::of);
+    }
 }
