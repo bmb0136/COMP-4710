@@ -9,7 +9,7 @@ public record Pitch(@NotNull PitchName name, int octave) implements Comparable<P
         // Have to copy logic to avoid NullPointerException
         int midi = 60 + (12 * (octave - 4)) + name.getOctaveOffset();
         if (midi < 0 || midi > 127) {
-            throw new IllegalArgumentException("Pitch: outside of MIDI range (%s%d -> %d)".formatted(name, octave, midi));
+            throw new IllegalArgumentException("Pitch: outside of MIDI range (%s%d -> %d ∉ [0, 127])".formatted(name, octave, midi));
         }
     }
 
