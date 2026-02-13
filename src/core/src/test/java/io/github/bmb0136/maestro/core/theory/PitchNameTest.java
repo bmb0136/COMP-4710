@@ -1,5 +1,6 @@
-package io.github.bmb0136.maestro.core;
+package io.github.bmb0136.maestro.core.theory;
 
+import io.github.bmb0136.maestro.core.TestUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
