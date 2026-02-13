@@ -1,8 +1,10 @@
 package io.github.bmb0136.maestro.core.clip;
 
+import io.github.bmb0136.maestro.core.theory.Note;
+
 import java.util.UUID;
 
-public abstract class Clip {
+public abstract class Clip implements Iterable<Note> {
     private final UUID id;
     private float position, duration;
     private boolean mutable;

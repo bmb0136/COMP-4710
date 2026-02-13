@@ -9,7 +9,8 @@ public enum EventResult {
     TRACK_ALREADY_ON_TIMELINE,
     INVALID_CLIP_DURATION,
     INVALID_CLIP_POSITION,
-    CLIP_OVERLAP;
+    CLIP_OVERLAP,
+    WRONG_CLIP_TYPE;
 
     private final boolean ok;
 
