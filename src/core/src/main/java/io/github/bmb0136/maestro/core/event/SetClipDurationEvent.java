@@ -20,12 +20,8 @@ public class SetClipDurationEvent extends ClipEvent {
             return EventResult.INVALID_CLIP_DURATION;
         }
         Clip target = context.target();
-        for (Clip other : Objects.requireNonNull(context.track())) {
-            if (!other.getId().equals(target.getId())
-                    && target.getPosition() < other.getPosition()
-                    && other.getPosition() + newDuration > other.getPosition()) {
-                return EventResult.CLIP_OVERLAP;
-            }
+        if (CommonChecks.doesClipOverlapExisting(Objects.requireNonNull(context.track()), target)) {
+            return EventResult.CLIP_OVERLAP;
         }
         target.setDuration(newDuration);
         return EventResult.OK;
