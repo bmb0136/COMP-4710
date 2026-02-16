@@ -51,6 +51,10 @@ public class Timeline implements Iterable<Track> {
         return false;
     }
 
+    public int size() {
+        return tracks.size();
+    }
+
     public boolean isMutable() {
         return mutable;
     }

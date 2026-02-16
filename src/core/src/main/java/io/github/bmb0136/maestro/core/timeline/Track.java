@@ -3,15 +3,13 @@ package io.github.bmb0136.maestro.core.timeline;
 import io.github.bmb0136.maestro.core.clip.Clip;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 public class Track implements Iterable<Clip> {
     private final HashMap<UUID, Clip> clips = new HashMap<>();
     private final UUID id;
     private boolean mutable;
+    private String name = "Unnamed Track";
 
     public Track() {
         this(UUID.randomUUID());
@@ -52,6 +50,17 @@ public class Track implements Iterable<Clip> {
         return clips.remove(clipId) != null;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(@NotNull String name) {
+        if (!mutable) {
+            throw new IllegalStateException("Track is immutable");
+        }
+        this.name = Objects.requireNonNull(name);
+    }
+
     public boolean isMutable() {
         return mutable;
     }
@@ -63,6 +72,7 @@ public class Track implements Iterable<Clip> {
     public Track copy(boolean newId) {
         var copy = new Track(newId ? UUID.randomUUID() : id);
         copy.setMutable(true);
+        copy.setName(getName());
         forEach(c -> copy.addClip(c.copy(newId)));
         copy.setMutable(false);
         return copy;
