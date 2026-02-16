@@ -20,10 +20,10 @@ public class SetClipPositionEvent extends ClipEvent {
             return EventResult.INVALID_CLIP_POSITION;
         }
         Clip target = context.target();
+        target.setPosition(newPosition);
         if (CommonChecks.doesClipOverlapExisting(Objects.requireNonNull(context.track()), target)) {
             return EventResult.CLIP_OVERLAP;
         }
-        target.setPosition(newPosition);
         return EventResult.OK;
     }
 }
