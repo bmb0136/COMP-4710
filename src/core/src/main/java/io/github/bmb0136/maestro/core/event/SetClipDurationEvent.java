@@ -21,7 +21,7 @@ public class SetClipDurationEvent extends ClipEvent {
         }
         Clip target = context.target();
         target.setDuration(newDuration);
-        if (CommonChecks.doesClipOverlapExisting(Objects.requireNonNull(context.track()), target)) {
+        if (CommonEventChecks.doesClipOverlapExisting(Objects.requireNonNull(context.track()), target)) {
             return EventResult.CLIP_OVERLAP;
         }
         return EventResult.OK;

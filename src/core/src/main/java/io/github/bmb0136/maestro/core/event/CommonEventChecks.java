@@ -4,8 +4,8 @@ import io.github.bmb0136.maestro.core.clip.Clip;
 import io.github.bmb0136.maestro.core.timeline.Track;
 import org.jetbrains.annotations.NotNull;
 
-final class CommonChecks {
-    private CommonChecks() {}
+final class CommonEventChecks {
+    private CommonEventChecks() {}
 
     public static boolean doesClipOverlapExisting(@NotNull Track track, @NotNull Clip clip) {
         for (Clip other : track) {
