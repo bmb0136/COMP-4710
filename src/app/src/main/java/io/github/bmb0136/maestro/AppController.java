@@ -13,8 +13,8 @@ import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.VBox;
+import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
 import java.util.UUID;
 
 public class AppController {
@@ -27,6 +27,8 @@ public class AppController {
     private ScrollPane trackListScrollPane;
     @FXML
     private VBox trackList;
+    @FXML
+    private VBox trackClipList;
     @FXML
     private Parent root;
     private final TimelineManager manager = new TimelineManager(1024, new Timeline());
@@ -48,13 +50,16 @@ public class AppController {
 
     @FXML
     private void onAddTrackButtonClicked() {
-        Track track = new Track();
+        addTrack(new Track());
+    }
+
+    private void addTrack(@NotNull Track track) {
         if (!manager.append(new AddTrackToTimelineEvent(track)).isOk()) {
             return;
         }
 
-        var subScene = TrackSubScene.create(manager, track.getId(), this::trackCallback);
-        trackList.getChildren().add(subScene);
+        trackList.getChildren().add(TrackSubScene.create(manager, track.getId(), this::trackCallback));
+        trackClipList.getChildren().add(TrackClipsSubScene.create(manager, track.getId()));
     }
 
     private void trackCallback(UUID trackId, TrackSubScene.CallbackType type) {
@@ -65,6 +70,7 @@ public class AppController {
                     return;
                 }
                 trackList.getChildren().remove(index);
+                trackClipList.getChildren().remove(index);
             }
             case null, default -> throw new IllegalArgumentException();
         }

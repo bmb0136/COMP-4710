@@ -74,7 +74,7 @@
                <children>
                   <ScrollPane prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;" GridPane.columnIndex="2" GridPane.rowIndex="2">
                      <content>
-                        <VBox />
+                        <VBox fx:id="trackClipList" />
                      </content></ScrollPane>
                   <HBox prefHeight="100.0" prefWidth="200.0" spacing="4.0">
                      <children>
