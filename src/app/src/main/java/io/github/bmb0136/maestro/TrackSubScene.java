@@ -5,6 +5,7 @@ import io.github.bmb0136.maestro.core.timeline.TimelineManager;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.SubScene;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -23,6 +24,8 @@ public class TrackSubScene extends SubScene {
     private final BiConsumer<UUID, CallbackType> callback;
 
     @FXML
+    private Parent root;
+    @FXML
     private Label nameLabel;
     @FXML
     private TextField nameEditField;
@@ -37,7 +40,7 @@ public class TrackSubScene extends SubScene {
 
     @FXML
     private void initialize() {
-        getRoot().getStylesheets().add("/DarkMode.css");
+        root.getStylesheets().add("/DarkMode.css");
         manager.get().getTrack(trackId).ifPresent(t -> nameEditField.setText(t.getName()));
         nameLabel.textProperty().bind(nameEditField.textProperty());
         nameLabel.visibleProperty().bind(Bindings.not(nameEditField.visibleProperty()));
