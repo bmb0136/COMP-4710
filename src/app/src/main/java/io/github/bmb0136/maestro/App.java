@@ -16,6 +16,7 @@ public class App extends Application {
         Parent root = FXMLLoader.load(resource);
         Scene scene = new Scene(root, 1280, 720);
         stage.setScene(scene);
+        stage.setTitle("Maestro");
         stage.show();
     }
 }
