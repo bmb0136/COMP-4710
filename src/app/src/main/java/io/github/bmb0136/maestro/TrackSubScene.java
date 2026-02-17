@@ -45,6 +45,12 @@ public class TrackSubScene extends SubScene {
         nameLabel.visibleProperty().bind(Bindings.not(nameEditField.visibleProperty()));
         nameEditField.mouseTransparentProperty().bind(Bindings.not(nameEditField.visibleProperty()));
         nameEditField.setVisible(false);
+        nameEditField.focusedProperty().addListener((observableValue, oldValue, newValue) -> {
+            if (!newValue) {
+                nameEditField.setText(manager.get().getTrack(trackId).orElseThrow().getName());
+                nameEditField.setVisible(false);
+            }
+        });
     }
 
     @FXML
