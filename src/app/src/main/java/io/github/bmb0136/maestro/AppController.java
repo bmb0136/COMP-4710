@@ -5,6 +5,7 @@ import io.github.bmb0136.maestro.core.event.RemoveTrackFromTimelineEvent;
 import io.github.bmb0136.maestro.core.timeline.Timeline;
 import io.github.bmb0136.maestro.core.timeline.TimelineManager;
 import io.github.bmb0136.maestro.core.timeline.Track;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
@@ -41,6 +42,7 @@ public class AppController {
     private Label bpmLabel;
     private final TimelineManager manager = new TimelineManager(1024, new Timeline());
     private final SimpleIntegerProperty bpm = new SimpleIntegerProperty(120);
+    private final SimpleDoubleProperty pixelsPerBeat = new SimpleDoubleProperty(60.0);
 
     @FXML
     private void initialize() {
@@ -102,7 +104,7 @@ public class AppController {
         trackClipList.getChildren().add(TrackClipsSubScene.create(manager, track.getId()));
     }
 
-    private void trackCallback(UUID trackId, TrackSubScene.CallbackType type) {
+    private void trackCallback(UUID trackId, TrackCallbackType type) {
         switch (type) {
             case DELETE -> {
                 int index = manager.get().indexOf(trackId);

@@ -21,7 +21,7 @@ import java.util.function.BiConsumer;
 public class TrackSubScene extends SubScene {
     private final TimelineManager manager;
     private final UUID trackId;
-    private final BiConsumer<UUID, CallbackType> callback;
+    private final BiConsumer<UUID, TrackCallbackType> callback;
 
     @FXML
     private Parent root;
@@ -30,7 +30,7 @@ public class TrackSubScene extends SubScene {
     @FXML
     private TextField nameEditField;
 
-    private TrackSubScene(TimelineManager manager, UUID trackId, BiConsumer<UUID, CallbackType> callback) {
+    private TrackSubScene(TimelineManager manager, UUID trackId, BiConsumer<UUID, TrackCallbackType> callback) {
         // Dummy node (can't pass null here)
         super(new Pane(), 240, 120);
         this.manager = manager;
@@ -74,10 +74,10 @@ public class TrackSubScene extends SubScene {
 
     @FXML
     private void onDeleteButtonClicked() {
-        callback.accept(trackId, CallbackType.DELETE);
+        callback.accept(trackId, TrackCallbackType.DELETE);
     }
 
-    public static TrackSubScene create(TimelineManager manager, UUID trackId, BiConsumer<UUID, CallbackType> callback) {
+    public static TrackSubScene create(TimelineManager manager, UUID trackId, BiConsumer<UUID, TrackCallbackType> callback) {
         URL resource = Objects.requireNonNull(App.class.getResource("/Track.fxml"));
         FXMLLoader loader = new FXMLLoader(resource);
         try {
@@ -90,7 +90,4 @@ public class TrackSubScene extends SubScene {
         }
     }
 
-    public enum CallbackType {
-        DELETE
-    }
 }
