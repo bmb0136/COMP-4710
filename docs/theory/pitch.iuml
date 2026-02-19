@@ -1,5 +1,5 @@
 @startuml Pitch object
-class TrackEvent{
+class Pitch{
     + toMidi(): int
     + fromMidi(int,boolen): Pitch
     + addSemitones(int): Pitch
@@ -9,5 +9,3 @@ class TrackEvent{
     + {static} tryParse(String): Optional<Pitch>
     }
 @enduml
-
-do tryparse
