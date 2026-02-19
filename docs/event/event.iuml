@@ -1,4 +1,24 @@
 
+@startuml event object
+abstract class Event {
+
+}
+abstract class TrackEvent{
++getTrackId(): UUID
+}
+abstract class TimelineEvent{
+
+}
+abstract class ClipEvent{
+ +getTrackId(): UUID
+ +getClipId(): UUID
+}
+Event <|.. ClipEvent
+Event <|.. TrackEvent
+Event <|.. TimelineEvent
+@enduml
+
+
 
 # tack event
 # timeline event
