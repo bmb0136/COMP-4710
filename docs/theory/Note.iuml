@@ -4,5 +4,9 @@ class Note{
 + modifyPosition(Function<Float, Float>): Note
 + modifyDuration(Function<Float, Float>): Note
 + modifyVolume(Function<Float, Float>): Note
++ pitch(): Pitch
++ position(): float
++ duration(): float
++ volume(): float
 }
 @enduml
