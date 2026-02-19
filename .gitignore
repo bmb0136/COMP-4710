@@ -6,3 +6,5 @@ build/
 
 src/.idea/
 src/**/bin
+.idea/
+*.iml

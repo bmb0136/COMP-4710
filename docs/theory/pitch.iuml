@@ -7,5 +7,7 @@ class Pitch{
     + compareTo(Pitch): int
     + equals(Object): boolean
     + {static} tryParse(String): Optional<Pitch>
+    + name(): PitchName
+    + octave(): int
     }
 @enduml
