@@ -4,7 +4,7 @@ class PianoRollClip {
     + removeNote(Pitch, float): boolean
     + {static} create(float, float): PianoRollClip
     + {static} create(float, float, Iterable<Note>): PianoRollClip
-    + iterator(): Iterator<Note>
+    
 }
 abstract class Clip {
 +copy(boolean): Clip
@@ -16,6 +16,7 @@ abstract class Clip {
 +setDuration(float): void
 +setMutable(boolean): void
 +setPosition(float): void
++iterator(): Iterator<Note>
 }
 PianoRollClip <|-- Clip
 @enduml
