@@ -1,4 +1,4 @@
-package io.github.bmb0136.maestro.core.theory;
+package io.github.bmb0136.maestro.core;
 
 import java.util.Optional;
 

@@ -1,7 +1,5 @@
-package io.github.bmb0136.maestro.core.theory;
+package io.github.bmb0136.maestro.core;
 
-import io.github.bmb0136.maestro.core.TestUtil;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -35,8 +33,8 @@ class PitchTest {
     @ParameterizedTest
     @MethodSource("io.github.bmb0136.maestro.core.TestUtil#allMidiNotes")
     public void fromMidi_insideMidiRange_succeeds(int midi) {
-        Assertions.assertDoesNotThrow(() -> Pitch.fromMidi(midi, false));
-        Assertions.assertDoesNotThrow(() -> Pitch.fromMidi(midi, true));
+        assertDoesNotThrow(() -> Pitch.fromMidi(midi, false));
+        assertDoesNotThrow(() -> Pitch.fromMidi(midi, true));
     }
 
     @ParameterizedTest

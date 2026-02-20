@@ -1,6 +1,5 @@
-package io.github.bmb0136.maestro.core.theory;
+package io.github.bmb0136.maestro.core;
 
-import io.github.bmb0136.maestro.core.TestUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -65,7 +64,7 @@ class PitchNameTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"", "   ", "\t", "   \n  "})
+    @ValueSource(strings = {"", "   " , "\t", "   \n  "})
     public void tryParse_emptyInput_fails(String input) {
         assertTrue(PitchName.tryParse(input).isEmpty());
     }

@@ -1,144 +1,75 @@
 package io.github.bmb0136.maestro.core.clip;
 
-import io.github.bmb0136.maestro.core.theory.Note;
-import io.github.bmb0136.maestro.core.theory.Pitch;
+import io.github.bmb0136.maestro.core.Note;
+import io.github.bmb0136.maestro.core.Pitch;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.TreeSet;
 
 public class PianoRollClip extends Clip {
-    private final ArrayList<Note> notes = new ArrayList<>();
+    private final TreeSet<Note> notes = new TreeSet<>();
 
-    public PianoRollClip() {
-        super();
+    public void addNote(@NotNull Note note) {
+        if (note.position() < 0 || note.position() + note.duration() > getDuration()) {
+            throw new IllegalArgumentException("Note cannot be placed outside of piano roll clip");
+        }
+        notes.add(note);
     }
 
-    protected PianoRollClip(UUID id) {
-        super(id);
-    }
-
-    /**
-     * Add a {@link Note} to this {@link PianoRollClip}
-     *
-     * @param note The {@link Note} to add
-     * @return {@code true} if the note was added successfully
-     */
-    public boolean addNote(@NotNull Note note) {
-        if (!isMutable()) {
-            throw new IllegalStateException("PianoRollClip is immutable");
-        }
-        if (notes.isEmpty()) {
-            notes.add(note);
-            return true;
-        }
-
-        // Find first note whose position is equal to the given note
-        var target = note.position();
-        int l = 0;
-        int r = notes.size() - 1;
-        while (l <= r) {
-            int mid = (l + r) / 2;
-            var other = notes.get(mid);
-            float diff = other.position() - target;
-            if (Math.abs(diff) < 1e-6f) {
-                if (other.pitch().equals(note.pitch())) {
-                    return false;
-                }
-                l = mid + 1;
-            } else if (diff < 0) {
-                l = mid + 1;
-            } else {
-                r = mid - 1;
-            }
-        }
-
-        // Check all equal position notes for duplicate pitches (binary search may not hit all of them)
-        // Since there are only 128 possible MIDI pitches this is O(128) instead of O(n)
-        int i = l - 1;
-        while (i >= 0 && Math.abs(target - notes.get(i).position()) < 1e-6f) {
-            if (notes.get(i).pitch().equals(note.pitch())) {
-                return false;
-            }
-            i--;
-        }
-
-        notes.add(l, note);
-        return true;
+    public boolean removeNote(@NotNull Note note) {
+        return notes.remove(note);
     }
 
     /**
-     * Removes the first {@link Note} from this {@link PianoRollClip} with the specified {@link Pitch} that also contains the given position
-     * <br>
-     * This method functions as a "remove at cursor" method
+     * Delete a note that is "under the cursor" given by {@code cursorPitch} and {@code cursorPosition}.
      *
-     * @param pitch The pitch of the {@link Note} to remove
-     * @param position The position the removed {@link Note} must contain
-     * @return {@code true} if any notes were removed
+     * @return {@code true} if a note was removed, or {@code false} otherwise
      */
-    public boolean removeNote(@NotNull Pitch pitch, float position) {
-        // IntelliJ is being silly
-        //noinspection ExtractMethodRecommender
-        if (!isMutable()) {
-            throw new IllegalStateException("PianoRollClip is immutable");
-        }
-
-        // Find first note whose right side (position + duration) is before position
-        int l = 0;
-        int r = notes.size() - 1;
-        while (l <= r) {
-            int mid = (l + r) / 2;
-            Note other = notes.get(mid);
-            float cmp = other.position() + other.duration() - position;
-            if (cmp < 0) {
-                l = mid + 1;
-            } else {
-                r = mid - 1;
+    public boolean removeNoteAtCursor(@NotNull Pitch cursorPitch, float cursorPosition) {
+        Note toRemove = null;
+        for (Note note : notes) {
+            if (!note.pitch().equals(cursorPitch)) {
+                continue;
             }
-        }
-
-        // Scan right to find first note that contains
-        int i = r + 1;
-        while (i < notes.size()) {
-            Note n = notes.get(i);
-            // If note is after position then we didn't find anything
-            if (n.position() >= position) {
-                break;
+            if (cursorPosition < note.position()) {
+                continue;
             }
-            // Check that we are inside the note
-            if (position < n.position() + n.duration() && n.pitch().equals(pitch)) {
-                notes.remove(i);
-                return true;
+            if (cursorPosition > note.position() + note.duration()) {
+                continue;
             }
-            i++;
+            toRemove = note;
+            break;
         }
-        return false;
+        if (toRemove != null) {
+            notes.remove(toRemove);
+        }
+        return toRemove != null;
     }
 
-    @Override
-    protected Clip createCopy(boolean newId) {
-        PianoRollClip copy = new PianoRollClip(newId ? UUID.randomUUID() : getId());
-        copy.setMutable(true);
-        copy.notes.addAll(notes);
-        copy.setMutable(false);
-        return copy;
-    }
-
-    public static PianoRollClip create(float position, float duration) {
-        return create(position, duration, Collections.emptyList());
-    }
-
-    public static PianoRollClip create(float position, float duration, Iterable<Note> notes) {
-        var clip = new PianoRollClip();
-        clip.setMutable(true);
-        clip.setPosition(position);
-        clip.setPosition(duration);
-        notes.forEach(clip::addNote);
-        clip.setMutable(false);
-        return clip;
-    }
+    // TODO: individual and bulk note manipulation methods
 
     @Override
     public @NotNull Iterator<Note> iterator() {
         return notes.iterator();
+    }
+
+    @Override
+    protected Clip createCopy() {
+        PianoRollClip clip = new PianoRollClip();
+        clip.notes.addAll(notes);
+        return clip;
+    }
+
+    @Override
+    protected void onDurationChanged() {
+        ArrayList<Note> toRemove = new ArrayList<>();
+        for (Note note : notes) {
+            if (note.position() + note.duration() > getDuration()) {
+                toRemove.add(note);
+            }
+        }
+        toRemove.forEach(notes::remove);
     }
 }
