@@ -1,5 +1,5 @@
 @startuml Pitch object
-class Pitch{
+record Pitch{
     + toMidi(): int
     + fromMidi(int,boolen): Pitch
     + addSemitones(int): Pitch

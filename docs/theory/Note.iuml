@@ -1,5 +1,5 @@
 @startuml Note object
-class Note{
+record Note{
 + modifyPitch(Function<Pitch, Pitch>): Note
 + modifyPosition(Function<Float, Float>): Note
 + modifyDuration(Function<Float, Float>): Note

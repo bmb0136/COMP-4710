@@ -1,5 +1,5 @@
 @startuml pitchName object
-class pitchName{
+enum pitchName{
 +next(): PitchName
 +next(int): PitchName
 +previous(): PitchName
