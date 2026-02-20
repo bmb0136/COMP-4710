@@ -1,4 +1,5 @@
 @startuml all
+top to bottom direction
 abstract class Clip {
     + getDuration(): float
     + getId(): UUID
@@ -103,12 +104,14 @@ class Track {
 
 }
 
-Clip <|.. Note
+Clip <.. Note
 PianoRollClip <|-- Clip
 Event <|-- TimelineEvent
 Event <|-- ClipEvent
 Event <|-- TrackEvent
-Timeline <|.. Track
-Track <|.. Clip
+Event<--EventContext
+Pitch<--PitchName
+Timeline *-- Track
+Track *-- Clip
 
 @enduml
