@@ -11,6 +11,7 @@ import javafx.collections.ListChangeListener;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.scene.Node;
+import javafx.scene.SubScene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ScrollBar;
 import javafx.scene.control.ScrollPane;
@@ -170,7 +171,9 @@ public class AppController {
         }
 
         trackList.getChildren().add(TrackSubScene.create(manager, track.getId(), this::trackCallback));
-        trackClipList.getChildren().add(TrackClipsSubScene.create(manager, track.getId()));
+        SubScene trackClips = TrackClipsSubScene.create(manager, track.getId());
+        trackClips.widthProperty().bind(timeMarkerList.widthProperty());
+        trackClipList.getChildren().add(trackClips);
     }
 
     private void trackCallback(UUID trackId, TrackCallbackType type) {

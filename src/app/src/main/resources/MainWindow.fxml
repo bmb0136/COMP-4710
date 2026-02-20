@@ -92,7 +92,7 @@
                         <Insets />
                      </GridPane.margin>
                   </ScrollPane>
-                  <ScrollPane fx:id="trackClipListScrollPane" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER" GridPane.columnIndex="2" GridPane.rowIndex="2">
+                  <ScrollPane fx:id="trackClipListScrollPane" hbarPolicy="NEVER" prefHeight="200.0" prefWidth="200.0" style="-fx-background-color: transparent;" vbarPolicy="NEVER" GridPane.columnIndex="2" GridPane.rowIndex="2">
                      <content>
                         <Pane>
                            <children>
