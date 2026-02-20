@@ -23,6 +23,7 @@ class PianoRollClip {
 abstract class Event<T> {
     + {abstract} apply(EventContext<T>): EventResult
 }
+enum EventResult
 
 record EventContext<T> {
     + target(): T
@@ -91,6 +92,15 @@ class Timeline {
     +copy(boolean): Timeline
 }
 
+class TimelineManager{
+    + get(): Timeline
+    + append(Event<?>): EventResult
+    + undo(): void
+    + redo(): void
+    + getMaxHistory(): int
+
+}
+
 class Track {
     + getId(): UUID
     + iterator(): Iterator<Clip>
@@ -104,14 +114,21 @@ class Track {
 
 }
 
-Clip <.. Note
+Note <..Clip
+PitchName <.. Pitch
+Pitch <.. Note
 PianoRollClip <|-- Clip
 Event <|-- TimelineEvent
 Event <|-- ClipEvent
 Event <|-- TrackEvent
-Event<--EventContext
-Pitch<--PitchName
+Event <.. EventResult
+EventContext <.. Event
 Timeline *-- Track
+Timeline <.. TimelineManager 
+Event <.. TimelineManager 
+EventContext <.. TimelineManager 
 Track *-- Clip
+EventResult <.. TimelineManager
+Note<.. PianoRolClip
 
 @enduml
